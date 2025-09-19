@@ -1,29 +1,39 @@
 import pandas as pd
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+#from rgbmatrix import RGBMatrix, RGBMatrixOptions
 import time
 import sys
-from PIL import Image, ImageDraw, ImageFont
+#from PIL import Image, ImageDraw, ImageFont
+
+nombre_archivo = 'prueba_excel.xlsx'
+nombre_columna_a_leer = 'hola' 
 
 # ---- 1. Función para leer frases del archivo de Excel ----
-def leer_frases_excel(nombre_archivo, nombre_columna):
+def leer_frases_excel(nombre_archivo, nombre_columna_a_leer):
     """Lee frases de una columna específica en un archivo de Excel."""
     try:
         df = pd.read_excel(nombre_archivo, sheet_name=0)
-        frases = df[nombre_columna].tolist()
+        frases = df[nombre_columna_a_leer].tolist()
         return frases
     except FileNotFoundError:
         print(f"Error: El archivo '{nombre_archivo}' no fue encontrado.")
         sys.exit(1)
     except KeyError:
-        print(f"Error: La columna '{nombre_columna}' no existe en el archivo.")
+        print(f"Error: La columna '{nombre_columna_a_leer}' no existe en el archivo.")
         sys.exit(1)
     except Exception as e:
         print(f"Ocurrió un error al leer el archivo: {e}")
         sys.exit(1)
+   
+datos_leidos = leer_frases_excel(nombre_archivo, nombre_columna_a_leer)
 
+# Muestra los datos leídos
+if datos_leidos:
+    print(f"Datos de la columna '{nombre_columna_a_leer}':")
+    for frase in datos_leidos:
+        print(frase)
+"""
 # ---- 2. Configuración y visualización en el panel LED ----
 def mostrar_frases_en_led_panel(frases):
-    """Muestra una lista de frases en un panel LED HUB75."""
     if not frases:
         print("No hay frases para mostrar. Saliendo del programa.")
         return
@@ -82,3 +92,4 @@ if __name__ == "__main__":
 
     # Muestra las frases en el panel LED
     mostrar_frases_en_led_panel(lista_de_frases)
+"""
