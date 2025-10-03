@@ -1,38 +1,23 @@
 #include <WiFi.h>
 
-const char* ssid = "TU_SSID";
-const char* password = "TU_PASSWORD";
+const char *ssid = "ESP32_AP";
+const char *password = "12345678";
 
-WiFiServer server(5000);  // Puerto TCP 5000
+WiFiServer server(5000);
 
 void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\nConectado a WiFi");
-  Serial.print("IP ESP32: ");
-  Serial.println(WiFi.localIP());
-
-  server.begin(); // Inicia el servidor
+  WiFi.softAP(ssid, password);  // Crea la red Wi-Fi
+  Serial.print("IP del AP: ");
+  Serial.println(WiFi.softAPIP());
+  server.begin();
 }
 
 void loop() {
-  WiFiClient client = server.available(); // Espera cliente
+  WiFiClient client = server.available();
   if (client) {
-    Serial.println("Cliente conectado");
-    while (client.connected()) {
-      if (client.available()) {
-        String data = client.readStringUntil('\n'); // Lee string hasta salto de línea
-        Serial.print("Recibido: ");
-        Serial.println(data);
-        // Aquí podrías imprimirlo en tu pantalla LCD
-      }
-    }
-    client.stop();
-    Serial.println("Cliente desconectado");
+    String data = client.readStringUntil('\n');
+    Serial.print("Recibido: ");
+    Serial.println(data);
   }
 }
