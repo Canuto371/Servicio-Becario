@@ -5,9 +5,9 @@ import socket
 
 # --- CONFIGURACIÓN TCP DE CADA ESP32 ---
 ESP32_IPS = {
-    "verso1": "192.168.50.101",  # Pantalla 1
-    "verso2": "192.168.50.102",  # Pantalla 2
-    "verso3": "192.168.50.103",  # Pantalla 3
+    "verso1": "192.168.50.29",  # Pantalla 1
+    "verso2": "192.168.50.252",  # Pantalla 2
+    "verso3": "192.168.50.19",  # Pantalla 3
 }
 ESP32_PORT = 5000
 
