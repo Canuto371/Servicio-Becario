@@ -61,12 +61,7 @@ def enviar_verso_tcp(socket_cliente, verso):
         return False
 
 def calcular_tiempo_scroll(verso):
-    ancho_verso = len(verso) * PIXELS_POR_CARACTER
-    if ancho_verso <= PANEL_WIDTH:
-        return 2.0  # mostrar al menos 2 seg si cabe completo
-    else:
-        pasos_scroll = ancho_verso + PANEL_WIDTH
-        return pasos_scroll * SCROLL_SPEED / 1000
+    return 10.0
 
 def main():
     archivo_csv = "aquarium_readings.csv"
