@@ -104,7 +104,7 @@ def main():
                     time.sleep(calcular_tiempo_scroll(texto))
 
             # Pausa aleatoria entre haikus
-            pausa = random.uniform(5.0, 15.0)
+            pausa = random.uniform(10.0, 15.0)
             print(f"Esperando {pausa:.1f} segundos antes del próximo haiku...\n")
             time.sleep(pausa)
 
