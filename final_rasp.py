@@ -47,43 +47,44 @@ def enviar_verso_tcp(socket_cliente, verso):
         socket_cliente.sendall(mensaje.encode('utf-8'))
         print(f"Enviado a ESP32: {verso}")
         respuesta = socket_cliente.recv(1024)
-        print("Respuesta:", respuesta.decode().strip())
+        if respuesta:
+            print("Respuesta del ESP32:", respuesta.decode().strip())
         return True
     except Exception as e:
-        print(f"Error enviando verso: {e}")
+        print(f"⚠️ Error enviando verso: {e}")
         return False
 
 def main():
     archivo_csv = "aquarium_readings.csv"
-    archivo_excel = "Hidropoeticas_Haikus.xlsx"
+    archivo_excel = "hidropoeticas_Haikus.xlsx"
 
     # Leer archivos
     df_sensores = leer_datos_sensores(archivo_csv)
     df_haikus = leer_haikus(archivo_excel)
 
-    print(f"Conectando a ESP32 en {ESP32_IP}:{ESP32_PORT}...")
+    print(f"Intentando conectar a ESP32 en {ESP32_IP}:{ESP32_PORT}...")
 
     # Crear conexión TCP persistente
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(10)
         s.connect((ESP32_IP, ESP32_PORT))
-        print("Conectado correctamente a ESP32 🟢\n")
+        print("Conexión establecida correctamente 🟢\n")
 
         print("=== INICIO DEL CICLO INFINITO DE HAIKUS ===\n")
+
         try:
             while True:
                 v1, v2, v3 = generar_haiku(df_sensores, df_haikus)
 
+                print(f"\n--- NUEVO HAIKU ---")
                 print(f"Verso 1: {v1}")
                 print(f"Verso 2: {v2}")
                 print(f"Verso 3: {v3}")
 
-                # Enviar versos con pausas aleatorias
                 if enviar_verso_tcp(s, v1):
                     time.sleep(random.uniform(1.0, 4.0))
-
                 if enviar_verso_tcp(s, v2):
                     time.sleep(random.uniform(1.0, 4.0))
-
                 if enviar_verso_tcp(s, v3):
                     time.sleep(random.uniform(1.0, 4.0))
 
@@ -92,10 +93,17 @@ def main():
                 time.sleep(pausa)
 
         except KeyboardInterrupt:
-            print("\n--- Ejecución interrumpida manualmente ---")
+            print("\n⛔ Ejecución interrumpida manualmente")
+
+        except Exception as e:
+            print(f"❌ Error de conexión o ejecución: {e}")
 
         finally:
             print("Cerrando conexión TCP con ESP32...")
+            try:
+                s.shutdown(socket.SHUT_RDWR)
+            except:
+                pass
             s.close()
             print("Conexión finalizada 🔴")
 
