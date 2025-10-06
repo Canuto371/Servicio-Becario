@@ -104,9 +104,9 @@ def main():
             '''for verso, texto in zip(["verso1", "verso2", "verso3"], [v1, v2, v3]):
                 if enviar_verso_tcp(sockets[verso], texto):
                     time.sleep(calcular_tiempo_scroll(texto))'''
-            enviar_verso_tcp(sockets[verso1], v1)
-            enviar_verso_tcp(sockets[verso2], v2)
-            enviar_verso_tcp(sockets[verso3], v3)
+            enviar_verso_tcp(sockets["verso1"], v1)
+            enviar_verso_tcp(sockets["verso2"], v2)
+            enviar_verso_tcp(sockets["verso3"], v3)
             time.sleep(10)
 
             # Pausa aleatoria entre haikus
